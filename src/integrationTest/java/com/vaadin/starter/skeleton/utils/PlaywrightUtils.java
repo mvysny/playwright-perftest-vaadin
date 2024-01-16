@@ -22,7 +22,7 @@ public class PlaywrightUtils {
     }
 
     /**
-     * Creates Playwright browser, navigates to given URL and runs the block.
+     * Creates Playwright browser, navigates to given URL and runs the test block.
      * @param mt logs time measurements here.
      * @param url the URL to navigate to.
      * @param limiter limits the number of concurrent playwright browser creations. Creating a browser is CPU-intensive;
@@ -31,7 +31,7 @@ public class PlaywrightUtils {
      *                with number of permits equal to the number of CPU cores divided by 2.
      * @param commenceLatch await until all Playwrights in all threads have been initialized, then commence all tests at once,
      *                      to start hammering the server at the same time.
-     * @param block runs the block with Playwright page.
+     * @param block runs the test block with Playwright page.
      */
     public static void withPlaywrightPage(@NotNull MeasureTime mt, @NotNull String url, @NotNull Semaphore limiter, @NotNull CountDownLatch commenceLatch, @NotNull Consumer<Page> block) {
         try {
