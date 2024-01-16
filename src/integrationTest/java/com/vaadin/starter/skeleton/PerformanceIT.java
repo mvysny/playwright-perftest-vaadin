@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 public class PerformanceIT {
     private static final Logger log = LoggerFactory.getLogger(PerformanceIT.class);
     /**
-     * Run the test case in this many browsers in parallel. CAREFUL when increasing this value.
+     * Run the test case in this many browsers in parallel. CAREFUL when increasing this value: read README.md for further details.
      */
     private static final int CONCURRENT_BROWSERS = 10;
     /**
