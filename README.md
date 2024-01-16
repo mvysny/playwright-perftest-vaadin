@@ -28,6 +28,8 @@ for further info on how you run Vaadin-Boot-based apps. Alternatively,
 run `./gradlew run` from your command line. The app will be running at [localhost:8080](http://localhost:8080),
 take a look.
 
+We recommend Intellij IDEA to open the project; the free IDEA Community version is enough.
+
 After the app is up-and-running, please run the performance test itself:
 
 * Via your IDE, by running the `PerformanceIT` java class as a test suite, OR
