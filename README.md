@@ -15,12 +15,13 @@ the Vaadin app with requests. Response time is remembered and printed at the end
 
 Before running the test you need to start the app itself. This is very easy, simply
 open the `Main.java` and run its `main()` method. Please see the [Vaadin Boot](https://github.com/mvysny/vaadin-boot#preparing-environment) documentation
-for further info on how you run Vaadin-Boot-based apps.
+for further info on how you run Vaadin-Boot-based apps. Alternatively,
+run `./gradlew run` from your command line.
 
 After the app is up-and-running, please run the performance test itself:
 
-* Via your IDE, by running the TODO java class as a test suite, OR
-* From command-line via Gradle: `todo`
+* Via your IDE, by running the `PerformanceIT` java class as a test suite, OR
+* From command-line via Gradle: `./gradlew integrationTest`
 
 ## Increasing number of browsers
 

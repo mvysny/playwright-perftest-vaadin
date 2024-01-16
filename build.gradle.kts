@@ -14,6 +14,25 @@ repositories {
 
 val vaadinVersion: String by extra
 
+// add separate integration tests. Taken from
+// https://docs.gradle.org/current/samples/sample_jvm_multi_project_with_additional_test_types.html
+val integrationTest by sourceSets.creating
+
+configurations[integrationTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+    useJUnitPlatform()
+
+    testClassesDirs = integrationTest.output.classesDirs
+    classpath = configurations[integrationTest.runtimeClasspathConfigurationName] + integrationTest.output
+
+    shouldRunAfter(tasks.test)
+}
+
+
 dependencies {
     // Vaadin
     implementation("com.vaadin:vaadin-core:$vaadinVersion") {
@@ -37,6 +56,10 @@ dependencies {
     testImplementation("com.github.mvysny.kaributesting:karibu-testing-v24:2.1.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Integration tests
+    "integrationTestImplementation"(project)
+    "integrationTestImplementation"("com.microsoft.playwright:playwright:1.40.0")
 }
 
 java {
@@ -44,7 +67,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
     testLogging {
         exceptionFormat = TestExceptionFormat.FULL
