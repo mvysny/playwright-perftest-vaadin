@@ -35,6 +35,8 @@ public class PlaywrightUtils {
      */
     public static void withPlaywrightPage(@NotNull MeasureTime mt, @NotNull String url, @NotNull Semaphore limiter, @NotNull CountDownLatch commenceLatch, @NotNull Consumer<Page> block) {
         try {
+            // acquire the semaphore permit before initializing Playwright. This way we'll
+            // initialize only certain amount of Playwrights at the same time, to avoid hammering on the CPU.
             limiter.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -48,7 +50,10 @@ public class PlaywrightUtils {
                     mt.log("New page");
                     page.navigate(url);
                     mt.log("Navigate");
+                    // Playwright is fully initialized in this thread. Release the semaphore permit, so that other threads can initialize their Playwright too.
                     limiter.release();
+
+                    // Await for other threads to initialize their Playwrights, before commencing the test suite.
                     commenceLatch.countDown();
                     try {
                         commenceLatch.await();
@@ -56,6 +61,8 @@ public class PlaywrightUtils {
                         throw new RuntimeException(e);
                     }
                     mt.log("LatchAwait");
+
+                    // Alrighty, everything is ready, commence the tests!
                     block.accept(page);
                     mt.log("Test");
                 }
