@@ -30,7 +30,7 @@ run `./gradlew run` from your command line.
 After the app is up-and-running, please run the performance test itself:
 
 * Via your IDE, by running the `PerformanceIT` java class as a test suite, OR
-* From command-line via Gradle: `./gradlew integrationTest`
+* From command-line via Gradle: `./gradlew integrationTest --info`
 
 ## Increasing number of browsers
 

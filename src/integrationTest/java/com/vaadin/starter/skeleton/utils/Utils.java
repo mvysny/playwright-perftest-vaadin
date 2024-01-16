@@ -13,4 +13,12 @@ public class Utils {
         list.sort(Comparator.naturalOrder());
         return list.get(list.size() / 2);
     }
+
+    public static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
