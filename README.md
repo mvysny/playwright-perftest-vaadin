@@ -50,7 +50,7 @@ available in your machine otherwise your OS will crash.
 
 Each browser also requires roughly 0,25 CPU core to run (depending on the tests). Make sure you have enough CPU cores,
 otherwise the browsers will start choking each other and you won't measure the performance
-of your server app but rather the ability of your OS to fail to run the browsers concurrently.
+of your server app but rather the inability of your OS to run too many browsers concurrently.
 
 A good rule of thumb to run the test on 100 browsers is to have a machine with 16 cores and 32 GB of RAM.
 Also prefer Linux or MacOS over Windows since Windows threading is known to suck. You can try running the tests,
