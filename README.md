@@ -32,6 +32,15 @@ After the app is up-and-running, please run the performance test itself:
 * Via your IDE, by running the `PerformanceIT` java class as a test suite, OR
 * From command-line via Gradle: `./gradlew integrationTest --info`
 
+## Test Case
+
+The app is very simple: enter your name into the TextField and you'll get a greeting Notification
+with the text "Hello, $name".
+
+The test case simply enters "Martin" into the text field and asserts on the notification contents.
+
+The test case is intentionally left simple, in order to provide a simple starting point for you.
+
 ## Increasing number of browsers
 
 The default number of concurrent browsers is 10. Each browser consumes around 256 MB of RAM;
