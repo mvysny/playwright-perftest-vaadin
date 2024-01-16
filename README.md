@@ -11,6 +11,15 @@ the Vaadin app with requests. Response time is remembered and printed at the end
 > consume 25 GB of memory; if your machine is not powerful enough it will make the entire OS
 > unresponsive and you WILL need to hard-reset your machine.
 
+Obviously running 100 browsers at the same time on one machine doesn't scale well -
+you won't be able to run, say, 1000 browsers unless you have a tremendously powerful machine.
+Yet writing the performance tests this way is very simple, and even with 100 browsers you will
+be able to measure your app's performance.
+
+If using this approach for actual performance testing, make sure the Vaadin app is running on
+another machine. Otherwise, the Vaadin app will compete for CPU and memory with the browsers,
+and you may experience degraded the performance of the Vaadin app.
+
 ## Running
 
 Before running the test you need to start the app itself. This is very easy, simply
