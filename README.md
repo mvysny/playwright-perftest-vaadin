@@ -4,7 +4,7 @@ A prototype project to test out the possibility to performance-test Vaadin apps
 using [Playwright](https://playwright.dev/). Written in Java, requires Java 17 or higher.
 
 This project contains a very simple Vaadin app and a JUnit test case which runs the
-performance test. When the test is run, 10 invisible browsers are started, and they will starts bombarding
+performance test. When the test is run, 10 invisible browsers are started, and they will start bombarding
 the Vaadin app with requests. Response time is remembered and printed at the end of the test.
 
 > WARNING! Each browser requires at least 256 MB of RAM. Launching 100 browsers will
@@ -45,3 +45,14 @@ of your server app but rather the ability of your OS to fail to run the browsers
 A good rule of thumb to run the test on 100 browsers is to have a machine with 16 cores and 32 GB of RAM.
 Also prefer Linux or MacOS over Windows since Windows threading is known to suck. You can try running the tests,
 but your OS UI will become unresponsive.
+
+## Reading the stats
+
+A lot of statistics is printed. The most important stats are of the tests themselves; look
+for "Detailed Test Stats" statistics. From those statistics, these are the important ones:
+
+* "Fill TextField": how much time it took to enter a text into the text field. This is purely a browser thing: If the median of this is more than 500ms,
+  you might be running on a slow machine or you might be having too many browsers running at the same time.
+* "Button click": this goes to the server and back.
+* "Text content retrieval": gets the "Hello, Martin" text from the Notification. Again purely a browser thing: if slow,
+  you need to run fewer browsers (or you need a more powerful machine).
