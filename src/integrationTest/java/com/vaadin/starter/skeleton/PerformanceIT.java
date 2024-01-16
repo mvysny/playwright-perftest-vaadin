@@ -75,7 +75,7 @@ public class PerformanceIT {
             if (log) {
                 PerformanceIT.log.info("Playwright is fully initialized in all threads, tests commencing");
             }
-            testStats.log("waiting for playwright init");
+            testStats.log("waited for playwright init");
             for (int i = 0; i < TEST_REPEATS; i++) {
                 Locator nameField = page.locator("vaadin-text-field#nameField input");
                 testStats.log("TextField lookup");
