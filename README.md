@@ -25,7 +25,8 @@ and you may experience degraded the performance of the Vaadin app.
 Before running the test you need to start the app itself. This is very easy, simply
 open the `Main.java` and run its `main()` method. Please see the [Vaadin Boot](https://github.com/mvysny/vaadin-boot#preparing-environment) documentation
 for further info on how you run Vaadin-Boot-based apps. Alternatively,
-run `./gradlew run` from your command line.
+run `./gradlew run` from your command line. The app will be running at [localhost:8080](http://localhost:8080),
+take a look.
 
 After the app is up-and-running, please run the performance test itself:
 
