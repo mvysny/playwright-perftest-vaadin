@@ -53,7 +53,7 @@ otherwise the browsers will start choking each other and you won't measure the p
 of your server app but rather the inability of your OS to run too many browsers concurrently.
 
 A good rule of thumb to run the test on 100 browsers is to have a machine with 16 cores and 32 GB of RAM.
-Also prefer Linux or MacOS over Windows since Windows threading is known to suck. You can try running the tests,
+Also prefer Linux or MacOS over Windows since Windows threading is known to suck: you can try running the tests,
 but your OS UI will become unresponsive.
 
 ## Reading the stats
