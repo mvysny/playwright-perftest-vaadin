@@ -4,6 +4,8 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
@@ -11,10 +13,12 @@ import java.util.function.Consumer;
 
 public class PlaywrightUtils {
 
+    private static final Logger log = LoggerFactory.getLogger(PlaywrightUtils.class);
+
     public static void warmupPlaywright(@NotNull String url) {
-        final MeasureTime mt = new MeasureTime("Warmup");
+        final MeasureTime mt = new MeasureTime("Playwright Warmup");
         withPlaywrightPage(mt, url, new Semaphore(1), new CountDownLatch(1), (page) -> {});
-        System.out.println(mt.format());
+        log.info(mt.format());
     }
 
     /**

@@ -7,6 +7,8 @@ import com.vaadin.starter.skeleton.utils.PlaywrightUtils;
 import com.vaadin.starter.skeleton.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -15,6 +17,7 @@ import java.util.concurrent.Semaphore;
 import java.util.stream.IntStream;
 
 public class PerformanceIT {
+    private static final Logger log = LoggerFactory.getLogger(PerformanceIT.class);
     /**
      * Run the test case in this many browsers in parallel. CAREFUL when increasing this value.
      */
@@ -48,34 +51,36 @@ public class PerformanceIT {
 
     @BeforeEach
     public void initSemaphore() {
-        final int permits = Runtime.getRuntime().availableProcessors() / 2;
+        final int cpuCores = Runtime.getRuntime().availableProcessors();
+        final int permits = cpuCores / 2;
         final int rate = permits < 1 ? 1 : permits;
         playwrightInitSemaphore = new Semaphore(rate);
-        System.out.println("Playwright initialization rate limited to " + rate + " concurrent inits");
+        log.info("CPU cores: " + cpuCores + "; Playwright initialization rate limited to " + rate + " concurrent inits");
     }
 
     @Test
     public void testImplementation() throws Exception {
-        final MeasureTime overall = new MeasureTime("Overall");
-        final MeasureTime testStats = new MeasureTime("TestStats");
+        final MeasureTime overall = new MeasureTime("Overall Playwright stats");
+        final MeasureTime testStats = new MeasureTime("Detailed Test Stats");
         final CountDownLatch commenceLatch = new CountDownLatch(CONCURRENT_BROWSERS);
         final List<Runnable> jobs = IntStream.range(0, CONCURRENT_BROWSERS).<Runnable>mapToObj(it -> () -> testRun(it == 0, overall, testStats, commenceLatch)).toList();
         executor.submitAllAndWait(jobs);
-        System.out.println(overall.format());
-        System.out.println(testStats.format());
+        log.info("Tests concluded");
+        log.info(overall.format());
+        log.info(testStats.format());
     }
 
     private void testRun(boolean log, @NotNull MeasureTime overall, @NotNull MeasureTime testStats, @NotNull CountDownLatch commenceLatch) {
         PlaywrightUtils.withPlaywrightPage(overall, URL, playwrightInitSemaphore, commenceLatch, (page) -> {
             if (log) {
-                System.out.println("Playwright is fully initialized in all threads, tests commencing");
+                PerformanceIT.log.info("Playwright is fully initialized in all threads, tests commencing");
             }
             testStats.log("waiting for playwright init");
             for (int i = 0; i < TEST_REPEATS; i++) {
                 Locator nameField = page.locator("vaadin-text-field#nameField input");
                 testStats.log("TextField lookup");
                 nameField.fill("Martin");
-                testStats.log("Fill");
+                testStats.log("Fill TextField");
                 Locator button = page.locator("vaadin-button#sayHelloButton");
                 testStats.log("Button lookup");
                 button.click();
