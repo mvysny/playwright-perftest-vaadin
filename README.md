@@ -1,40 +1,37 @@
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin-flow/Lobby#?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/mvysny/vaadin-boot-example-gradle)
+# Performance Testing Vaadin Apps with Playwright
 
-# Vaadin Boot Example App using Gradle
+A prototype project to test out the possibility to performance-test Vaadin apps
+using [Playwright](https://playwright.dev/). Written in Java, requires Java 17 or higher.
 
-A demo project showing the possibility of running a Vaadin app from an
-embedded Jetty, as a simple `main()` method. Written in Java.
-Uses [Vaadin Boot](https://github.com/mvysny/vaadin-boot). Requires Java 17+.
+This project contains a very simple Vaadin app and a JUnit test case which runs the
+performance test. When the test is run, 10 invisible browsers are started, and they will starts bombarding
+the Vaadin app with requests. Response time is remembered and printed at the end of the test.
 
-Both the development and production modes are supported. Also, the project
-demoes packaging itself into a zip file containing
-a list of jars and a runner script. See "Packaging for production" below
-for more details.
+> WARNING! Each browser requires at least 256 MB of RAM. Launching 100 browsers will
+> consume 25 GB of memory; if your machine is not powerful enough it will make the entire OS
+> unresponsive and you WILL need to hard-reset your machine.
 
-> Looking for **Vaadin 14 Gradle** version? Please see [vaadin14-boot-example-gradle](https://github.com/mvysny/vaadin14-boot-example-gradle)
+## Running
 
-> Looking for **Vaadin 24 Maven** version? Please see [vaadin-boot-example-maven](https://github.com/mvysny/vaadin-boot-example-maven)
+Before running the test you need to start the app itself. This is very easy, simply
+open the `Main.java` and run its `main()` method. Please see the [Vaadin Boot](https://github.com/mvysny/vaadin-boot#preparing-environment) documentation
+for further info on how you run Vaadin-Boot-based apps.
 
-See the live demo at [v-herd.eu/vaadin-boot-example-gradle/](https://v-herd.eu/vaadin-boot-example-gradle/)
+After the app is up-and-running, please run the performance test itself:
 
-# Documentation
+* Via your IDE, by running the TODO java class as a test suite, OR
+* From command-line via Gradle: `todo`
 
-Please see the [Vaadin Boot](https://github.com/mvysny/vaadin-boot#preparing-environment) documentation
-on how you run, develop and package this Vaadin-Boot-based app.
+## Increasing number of browsers
 
-# Native Mode
+The default number of concurrent browsers is 10. Each browser consumes around 256 MB of RAM;
+the test therefore needs 2,5 GB of RAM to run. Make sure you have at least that amount of RAM
+available in your machine otherwise your OS will crash.
 
-Alpha quality. Demoes a preliminary support for [GraalVM](https://www.graalvm.org/) native mode.
-At the moment doesn't work: [Jetty #9514](https://github.com/eclipse/jetty.project/issues/9514).
-See [Vaadin Boot #10](https://github.com/mvysny/vaadin-boot/issues/10) and [Vaadin Boot: Native](https://github.com/mvysny/vaadin-boot#native)
-for more details.
+Each browser also requires roughly 0,25 CPU core to run (depending on the tests). Make sure you have enough CPU cores,
+otherwise the browsers will start choking each other and you won't measure the performance
+of your server app but rather the ability of your OS to fail to run the browsers concurrently.
 
-Quick steps:
-
-1. Install GraalVM as per https://graalvm.github.io/native-build-tools/latest/gradle-plugin-quickstart.html
-2. `git clone https://github.com/mvysny/vaadin-boot-example-gradle`
-3. `git checkout native`
-4. `./gradlew clean build nativeCompile -Pvaadin.productionMode`
-5. `cd build/native/nativeCompile/`
-6. Run the `vaadin-boot-example-gradle` binary
+A good rule of thumb to run the test on 100 browsers is to have a machine with 16 cores and 32 GB of RAM.
+Also prefer Linux or MacOS over Windows since Windows threading is known to suck. You can try running the tests,
+but your OS UI will become unresponsive.
