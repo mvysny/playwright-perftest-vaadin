@@ -41,6 +41,12 @@ public class ParallelPlaywright implements AutoCloseable {
     @NotNull
     private final String url;
 
+    /**
+     * Creates the playwright browser manager. Don't forget to call {@link #initialize()} to create the browsers.
+     * @param concurrentBrowsers the number of concurrent browsers to create. Beware: every browser takes 256MB of RAM, so
+     *                           make extra sure your system can handle such number of browsers.
+     * @param url the app URL. All browsers will be navigated to this URL.
+     */
     public ParallelPlaywright(int concurrentBrowsers, @NotNull String url) {
         this.concurrentBrowsers = concurrentBrowsers;
         this.url = Objects.requireNonNull(url);
@@ -54,7 +60,12 @@ public class ParallelPlaywright implements AutoCloseable {
      * Creates the browsers. Might take a long time to execute.
      */
     public void initialize() {
-        PlaywrightUtils.warmupPlaywright(url);
+        // Playwright warm-up
+        final MeasureTime mtWarmup = new MeasureTime("Playwright Warmup");
+        PlaywrightAndPage.create(mtWarmup, url).close();
+        log.info(mtWarmup.format());
+
+        // Warm-up succeeded, create the browsers en-masse.
         final int cpuCores = Runtime.getRuntime().availableProcessors();
         final int permits = cpuCores / 2;
         final int rate = permits < 1 ? 1 : permits;
@@ -76,6 +87,11 @@ public class ParallelPlaywright implements AutoCloseable {
         log.info(concurrentBrowsers + " Playwright browsers initialized: " + mt.format());
     }
 
+    /**
+     * Runs given block on all browsers in parallel. Awaits until all runnables have
+     * finished their execution. If any of the blocks fail, this function fails too.
+     * @param testBlock the test block to run on all browsers, it receives the Playwright browser page already navigated to given URL.
+     */
     public void runInAllBrowsersAndWait(@NotNull Consumer<Page> testBlock) {
         runInAllThreadsAndWait(() -> {
             final Page page = Objects.requireNonNull(playwrightThreadLocal.get().page);
@@ -85,7 +101,7 @@ public class ParallelPlaywright implements AutoCloseable {
 
     /**
      * Runs given Runnable in all threads in parallel. Awaits until all runnables have
-     * finished their execution.
+     * finished their execution. If any of the blocks fail, this function fails too.
      * @param runnable the runnable to run in parallel, not null.
      */
     private void runInAllThreadsAndWait(@NotNull Runnable runnable) {
