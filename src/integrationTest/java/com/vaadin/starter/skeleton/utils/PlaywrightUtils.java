@@ -15,6 +15,10 @@ public class PlaywrightUtils {
 
     private static final Logger log = LoggerFactory.getLogger(PlaywrightUtils.class);
 
+    /**
+     * Initializes Playwright and makes sure given URL is accessible. Closes Playwright afterwards.
+     * @param url the URL to ping.
+     */
     public static void warmupPlaywright(@NotNull String url) {
         final MeasureTime mt = new MeasureTime("Playwright Warmup");
         withPlaywrightPage(mt, url, new Semaphore(1), new CountDownLatch(1), (page) -> {});
