@@ -25,6 +25,11 @@ public class BetterExecutor implements AutoCloseable {
         this.executor = Objects.requireNonNull(executor);
     }
 
+    /**
+     * Submits all tasks to the executor.
+     * @param tasks the list of tasks to submit, may be empty.
+     * @return a future which is completed when all tasks are finished.
+     */
     @NotNull
     private CompletableFuture<Void> submitAll(@NotNull List<Runnable> tasks) {
         final List<CompletableFuture<Void>> futures = tasks.stream().map(task -> CompletableFuture.runAsync(task, executor)).toList();
