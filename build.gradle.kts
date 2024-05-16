@@ -46,20 +46,20 @@ dependencies {
     // Vaadin-Boot
     implementation("com.github.mvysny.vaadin-boot:vaadin-boot:12.2")
 
-    implementation("org.jetbrains:annotations:24.0.1")
+    implementation("org.jetbrains:annotations:24.1.0")
 
     // logging
     // currently we are logging through the SLF4J API to SLF4J-Simple. See src/main/resources/simplelogger.properties file for the logger configuration
-    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
 
     // Fast Vaadin unit-testing with Karibu-Testing: https://github.com/mvysny/karibu-testing
     testImplementation("com.github.mvysny.kaributesting:karibu-testing-v24:2.1.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // Integration tests
     "integrationTestImplementation"(project)
-    "integrationTestImplementation"("com.microsoft.playwright:playwright:1.40.0")
+    "integrationTestImplementation"("com.microsoft.playwright:playwright:1.43.0")
 }
 
 java {
