@@ -39,27 +39,29 @@ public class PerformanceIT {
     @Test
     public void testImplementation() {
         final MeasureTime testStats = new MeasureTime("Detailed Test Stats");
-        executor.runInAllBrowsersAndWait(page -> testRun(page, testStats));
+        executor.runInAllBrowsersAndWait(page -> {
+            for (int i = 0; i < TEST_REPEATS; i++) {
+                testRun(page, testStats);
+            }
+        });
         log.info(testStats.format());
     }
 
     private void testRun(@NotNull Page page, @NotNull MeasureTime testStats) {
-        for (int i = 0; i < TEST_REPEATS; i++) {
-            Locator nameField = page.locator("vaadin-text-field#nameField input");
-            testStats.log("TextField lookup");
-            nameField.fill("Martin");
-            testStats.log("Fill TextField");
-            Locator button = page.locator("vaadin-button#sayHelloButton");
-            testStats.log("Button lookup");
-            button.click();
-            testStats.log("Button click");
-            Locator card =
-                    page.locator("vaadin-notification-container > vaadin-notification-card").first();
-            testStats.log("Card lookup");
-            Assertions.assertEquals("Hello Martin", card.textContent());
-            testStats.log("Text content retrieval");
-            Utils.sleep(1000L);
-            testStats.log("Sleep");
-        }
+        Locator nameField = page.locator("vaadin-text-field#nameField input");
+        testStats.log("TextField lookup");
+        nameField.fill("Martin");
+        testStats.log("Fill TextField");
+        Locator button = page.locator("vaadin-button#sayHelloButton");
+        testStats.log("Button lookup");
+        button.click();
+        testStats.log("Button click");
+        Locator card =
+                page.locator("vaadin-notification-container > vaadin-notification-card").first();
+        testStats.log("Card lookup");
+        Assertions.assertEquals("Hello Martin", card.textContent());
+        testStats.log("Text content retrieval");
+        Utils.sleep(1000L);
+        testStats.log("Sleep");
     }
 }
